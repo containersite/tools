@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Hub Code Generator</title>
+    <title>Single Video Post Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
         * {
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -53,7 +53,7 @@
             gap: 30px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 768px) {
             .content {
                 grid-template-columns: 1fr;
             }
@@ -106,7 +106,7 @@
         }
 
         textarea {
-            height: 300px;
+            height: 200px;
             resize: vertical;
             font-family: monospace;
         }
@@ -135,13 +135,52 @@
             transform: translateY(-1px);
         }
 
-        .post-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 18px;
+        .actions {
+            display: flex;
+            gap: 15px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            color: #4caf50;
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #f44336;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        /* Post item styles */
         .post-item {
             background: #171717;
             border-radius: 12px;
@@ -151,6 +190,8 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             transition: transform .3s, box-shadow .3s;
             cursor: pointer;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
         .post-item:hover {
@@ -215,50 +256,18 @@
             overflow: hidden;
         }
 
-        .actions {
+        .preview-container {
             display: flex;
-            gap: 15px;
+            justify-content: center;
             margin-top: 20px;
-        }
-
-        .message {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            display: none;
-        }
-
-        .success {
-            background: rgba(0, 255, 0, 0.1);
-            border: 1px solid rgba(0, 255, 0, 0.3);
-            color: #4caf50;
-        }
-
-        .instructions {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .instructions ol {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-
-        .instructions li {
-            margin-bottom: 8px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Video Hub Code Generator</h1>
-            <p class="subtitle">Create beautiful video post grids with auto-generated HTML code</p>
+            <h1>Single Video Post Generator</h1>
+            <p class="subtitle">Create a single video post with the exact format you need</p>
         </header>
 
         <div class="content">
@@ -268,24 +277,23 @@
                 </h2>
                 
                 <div class="form-group">
-                    <label for="imageLinks">Image URLs (one per line)</label>
-                    <textarea id="imageLinks" placeholder="https://example.com/image1.jpg
-https://example.com/image2.jpg
-https://example.com/image3.jpg"></textarea>
+                    <label for="imageUrl">Image URL</label>
+                    <input type="text" id="imageUrl" placeholder="https://example.com/image.jpg">
                 </div>
                 
                 <div class="form-group">
-                    <label for="titles">Video Titles (one per line)</label>
-                    <textarea id="titles" placeholder="Amazing Video 1
-Incredible Video 2
-Fantastic Video 3"></textarea>
+                    <label for="title">Video Title</label>
+                    <input type="text" id="title" placeholder="Your amazing video title">
                 </div>
                 
                 <div class="form-group">
-                    <label for="redirectLinks">Redirect URLs (one per line)</label>
-                    <textarea id="redirectLinks" placeholder="https://example.com/page1
-https://example.com/page2
-https://example.com/page3"></textarea>
+                    <label for="videoUrl">Video URL (opens in new tab)</label>
+                    <input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="redirectUrl">Redirect URL (current page redirects here)</label>
+                    <input type="text" id="redirectUrl" placeholder="https://example.com/page">
                 </div>
                 
                 <div class="actions">
@@ -303,8 +311,7 @@ https://example.com/page3"></textarea>
                 <div class="instructions">
                     <p><strong>How to use:</strong></p>
                     <ol>
-                        <li>Enter image URLs, titles, and redirect links (one per line in each textarea)</li>
-                        <li>Make sure each section has the same number of lines</li>
+                        <li>Enter the image URL, title, video URL, and redirect URL</li>
                         <li>Click "Generate Code" to create the HTML</li>
                         <li>Click "Preview" to see how it will look</li>
                         <li>Copy the generated code and use it in your website</li>
@@ -332,8 +339,10 @@ https://example.com/page3"></textarea>
                     <h2 class="section-title" style="margin-top: 30px;">
                         <i class="fas fa-eye"></i> Preview
                     </h2>
-                    <div class="post-grid" id="previewGrid">
-                        <!-- Preview will be generated here -->
+                    <div class="preview-container">
+                        <div id="previewPost">
+                            <!-- Preview will be generated here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -349,65 +358,29 @@ https://example.com/page3"></textarea>
             const messageDiv = document.getElementById('message');
             const outputCode = document.getElementById('outputCode');
             const previewArea = document.getElementById('previewArea');
-            const previewGrid = document.getElementById('previewGrid');
+            const previewPost = document.getElementById('previewPost');
             
-            // Generate HTML code
+            // Generate HTML code for a single post
             generateBtn.addEventListener('click', function() {
-                const imageLinks = document.getElementById('imageLinks').value.split('\n').filter(line => line.trim() !== '');
-                const titles = document.getElementById('titles').value.split('\n').filter(line => line.trim() !== '');
-                const redirectLinks = document.getElementById('redirectLinks').value.split('\n').filter(line => line.trim() !== '');
+                const imageUrl = document.getElementById('imageUrl').value.trim();
+                const title = document.getElementById('title').value.trim();
+                const videoUrl = document.getElementById('videoUrl').value.trim();
+                const redirectUrl = document.getElementById('redirectUrl').value.trim();
                 
-                // Check if all inputs have the same number of items
-                if (imageLinks.length !== titles.length || imageLinks.length !== redirectLinks.length) {
-                    showMessage('Error: Each input must have the same number of lines', 'error');
-                    return;
-                }
-                
-                if (imageLinks.length === 0) {
-                    showMessage('Error: Please enter at least one item in each field', 'error');
+                // Check if all fields are filled
+                if (!imageUrl || !title || !videoUrl || !redirectUrl) {
+                    showMessage('Error: Please fill in all fields', 'error');
                     return;
                 }
                 
                 // Generate the HTML code
-                let htmlCode = `<section class="site-related-area">
-  <h2 class="site-related-heading">
-    <i class="fa-solid fa-circle-play"></i> Video Hub
-  </h2>
-
-  <div class="post-grid">\n`;
-                
-                for (let i = 0; i < imageLinks.length; i++) {
-                    htmlCode += `
-    <!-- Post ${i+1} -->
-    <div class="post-item" data-video-url="${redirectLinks[i]}" data-redirect-url="${redirectLinks[i]}">
+                const htmlCode = `    <div class="post-item" data-video-url="${videoUrl}" data-redirect-url="${redirectUrl}">
       <div class="post-thumb">
-        <img src="${imageLinks[i]}" />
+        <img src="${imageUrl}" />
         <span class="post-play"><i class="fa-solid fa-play"></i></span>
       </div>
-      <h3 class="post-title">${titles[i]}</h3>
+      <h3 class="post-title">${title}</h3>
     </div>`;
-                }
-                
-                htmlCode += `
-  </div>
-</section>
-
-<script>
-  // Add click event to all video cards
-  document.querySelectorAll('.post-item').forEach(card => {
-    card.addEventListener('click', function() {
-      // Get the video URL and redirect URL from data attributes
-      const videoUrl = this.getAttribute('data-video-url');
-      const redirectUrl = this.getAttribute('data-redirect-url');
-      
-      // Open video in new tab
-      window.open(videoUrl, '_blank');
-      
-      // Redirect current tab
-      window.location.href = redirectUrl;
-    });
-  });
-<\/script>`;
                 
                 outputCode.value = htmlCode;
                 showMessage('Code generated successfully!', 'success');
@@ -415,59 +388,45 @@ https://example.com/page3"></textarea>
             
             // Preview the generated design
             previewBtn.addEventListener('click', function() {
-                const imageLinks = document.getElementById('imageLinks').value.split('\n').filter(line => line.trim() !== '');
-                const titles = document.getElementById('titles').value.split('\n').filter(line => line.trim() !== '');
-                const redirectLinks = document.getElementById('redirectLinks').value.split('\n').filter(line => line.trim() !== '');
+                const imageUrl = document.getElementById('imageUrl').value.trim();
+                const title = document.getElementById('title').value.trim();
+                const videoUrl = document.getElementById('videoUrl').value.trim();
+                const redirectUrl = document.getElementById('redirectUrl').value.trim();
                 
-                // Check if all inputs have the same number of items
-                if (imageLinks.length !== titles.length || imageLinks.length !== redirectLinks.length) {
-                    showMessage('Error: Each input must have the same number of lines', 'error');
-                    return;
-                }
-                
-                if (imageLinks.length === 0) {
-                    showMessage('Error: Please enter at least one item in each field', 'error');
+                // Check if all fields are filled
+                if (!imageUrl || !title || !videoUrl || !redirectUrl) {
+                    showMessage('Error: Please fill in all fields', 'error');
                     return;
                 }
                 
                 // Generate preview
-                previewGrid.innerHTML = '';
-                
-                for (let i = 0; i < imageLinks.length; i++) {
-                    const postItem = document.createElement('div');
-                    postItem.className = 'post-item';
-                    postItem.setAttribute('data-video-url', redirectLinks[i]);
-                    postItem.setAttribute('data-redirect-url', redirectLinks[i]);
-                    
-                    postItem.innerHTML = `
+                previewPost.innerHTML = `
+                    <div class="post-item" data-video-url="${videoUrl}" data-redirect-url="${redirectUrl}">
                         <div class="post-thumb">
-                            <img src="${imageLinks[i]}" onerror="this.src='https://via.placeholder.com/300x400/333/fff?text=Image+Error'" />
+                            <img src="${imageUrl}" onerror="this.src='https://via.placeholder.com/300x400/333/fff?text=Image+Error'" />
                             <span class="post-play"><i class="fa-solid fa-play"></i></span>
                         </div>
-                        <h3 class="post-title">${titles[i]}</h3>
-                    `;
-                    
-                    // Add click event for preview
-                    postItem.addEventListener('click', function() {
-                        const videoUrl = this.getAttribute('data-video-url');
-                        const redirectUrl = this.getAttribute('data-redirect-url');
-                        
-                        // In preview, we'll just show an alert instead of redirecting
-                        alert(`In the actual implementation:\n- ${videoUrl} would open in a new tab\n- Current page would redirect to ${redirectUrl}`);
-                    });
-                    
-                    previewGrid.appendChild(postItem);
-                }
+                        <h3 class="post-title">${title}</h3>
+                    </div>
+                `;
+                
+                // Add click event for preview
+                const postItem = previewPost.querySelector('.post-item');
+                postItem.addEventListener('click', function() {
+                    // In preview, we'll just show an alert instead of redirecting
+                    alert(`In the actual implementation:\n- ${videoUrl} would open in a new tab\n- Current page would redirect to ${redirectUrl}`);
+                });
                 
                 previewArea.style.display = 'block';
-                showMessage('Preview generated! Click on any card to see the redirect behavior.', 'success');
+                showMessage('Preview generated! Click on the card to see the redirect behavior.', 'success');
             });
             
             // Reset all inputs
             resetBtn.addEventListener('click', function() {
-                document.getElementById('imageLinks').value = '';
-                document.getElementById('titles').value = '';
-                document.getElementById('redirectLinks').value = '';
+                document.getElementById('imageUrl').value = '';
+                document.getElementById('title').value = '';
+                document.getElementById('videoUrl').value = '';
+                document.getElementById('redirectUrl').value = '';
                 outputCode.value = '';
                 previewArea.style.display = 'none';
                 showMessage('All fields have been reset', 'success');
@@ -496,27 +455,11 @@ https://example.com/page3"></textarea>
                 }, 5000);
             }
             
-            // Add some sample data for demonstration
-            document.getElementById('imageLinks').value = `https://via.placeholder.com/300x400/111/fff?text=Video+1
-https://via.placeholder.com/300x400/222/fff?text=Video+2
-https://via.placeholder.com/300x400/333/fff?text=Video+3
-https://via.placeholder.com/300x400/444/fff?text=Video+4
-https://via.placeholder.com/300x400/555/fff?text=Video+5
-https://via.placeholder.com/300x400/666/fff?text=Video+6`;
-            
-            document.getElementById('titles').value = `Demo Video Title Number One
-Second Demo Video Title Will Show Here
-Amazing Video Demo Preview Card
-Fourth Premium Style Video Card
-Fifth Video Example Demo
-Sixth Video Demo Preview`;
-            
-            document.getElementById('redirectLinks').value = `https://www.example.com/page1
-https://www.example.com/page2
-https://www.example.com/page3
-https://www.example.com/page4
-https://www.example.com/page5
-https://www.example.com/page6`;
+            // Add sample data for demonstration
+            document.getElementById('imageUrl').value = 'https://via.placeholder.com/300x400/444/fff?text=Video+4';
+            document.getElementById('title').value = 'Fourth Premium Style Video Card';
+            document.getElementById('videoUrl').value = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+            document.getElementById('redirectUrl').value = 'https://www.example.com/page4';
         });
     </script>
 </body>
