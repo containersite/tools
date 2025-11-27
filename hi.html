@@ -1,1 +1,137 @@
-javascript:(function(){let o=document.getElementById('cbFast');if(o)o.remove();let d=document.createElement('div');d.id='cbFast';Object.assign(d.style,{position:'fixed',top:'50%',left:'50%',transform:'translate(-50%,-50%)',background:'linear-gradient(135deg,#ff006e,#ff9500)',color:'white',padding:'20px',borderRadius:'18px',boxShadow:'0 15px 50px rgba(0,0,0,0.8)',zIndex:'999999',width:'440px',fontFamily:'Segoe UI',cursor:'move',border:'4px solid gold'});d.innerHTML=`<h2 style="margin:0 0 15px;text-align:center;font-size:26px;">Chudir Bhai Turbo 1sec</h2><textarea id="u" placeholder="পেস্ট কর ৫০টা পর্যন্ত লিংক" style="width:100%;height:180px;padding:12px;border-radius:10px;border:none;font-size:15px;margin-bottom:12px;"></textarea><button id="g" style="width:100%;padding:15px;background:#00ff9d;color:black;border:none;border-radius:10px;font-size:20px;font-weight:bold;cursor:pointer;">Start Turbo (1 sec/profile)</button><p style="text-align:center;margin-top:8px;">চুদির ভাই ⚡</p>`;document.body.appendChild(d);let dr=false,x=0,y=0;d.onmousedown=e=>{if(e.target.tagName!='BUTTON'){dr=true;x=e.clientX-d.offsetLeft;y=e.clientY-d.offsetTop}};document.onmousemove=e=>{if(dr){d.style.left=e.clientX-x+'px';d.style.top=e.clientY-y+'px';d.style.transform='none'}};document.onmouseup=()=>{dr=false};document.getElementById('g').onclick=()=>{let l=document.getElementById('u').value.split(/\n|,/).map(s=>s.trim()).filter(s=>s);if(!l.length)return alert('লিংক দে রে বে!');if(l.length>50){l=l.slice(0,50);alert('৫০টা নিচ্ছি');}d.remove();let i=0;function n(){if(i>=l.length){alert('টার্বো মোডে সব শেষ! '+l.length+'টা প্রোফাইল ধ্বংস করা হয়েছে ⚡');return}let u=l[i++];if(!u.includes('http'))u='https://www.facebook.com'+u;let t=window.open(u,'_blank');if(!t){alert('পপআপ ব্লক করা! Allow কর');return}let c=0;let int=setInterval(()=>{try{if(t.closed){clearInterval(int);n();return}c++;let f=null;let likes=Array.from(t.document.querySelectorAll('span,div')).find(e=>e.textContent.trim()==='Like'&&e.offsetParent&&!e.textContent.includes('Liked'));if(likes){likes.click()}let follows=Array.from(t.document.querySelectorAll('span,div')).find(e=>e.textContent.trim()==='Follow'&&e.offsetParent&&!e.textContent.includes('Following'));if(follows){follows.click();clearInterval(int);setTimeout(()=>{t.close(),n(),800)}if(c>20){t.close();clearInterval(int);n()}}catch{}},500)}else{setTimeout(()=>{t.close();n()},1200)}}n()}})();
+javascript:(function(){
+    let old = document.getElementById('cbAutoPopup');
+    if(old) old.remove();
+
+    let d = document.createElement('div');
+    d.id = 'cbAutoPopup';
+    Object.assign(d.style, {
+        position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)',
+        background:'linear-gradient(135deg,#8b5cf6,#3b82f6)', color:'white',
+        padding:'25px', borderRadius:'20px', boxShadow:'0 15px 50px rgba(0,0,0,0.7)',
+        zIndex:'999999', width:'460px', fontFamily:'Segoe UI,Arial,sans-serif',
+        cursor:'move', border:'3px solid gold'
+    });
+
+    d.innerHTML = `
+        <h2 style="margin:0 0 15px;text-align:center;font-size:24px;">Chudir Bhai Pro 2025</h2>
+        <textarea id="urls" placeholder="ফেসবুক প্রোফাইল লিংক পেস্ট কর (সর্বোচ্চ ৫০টা)" 
+                  style="width:100%;height:200px;padding:15px;border-radius:12px;border:none;font-size:15px;margin-bottom:15px;"></textarea>
+        <button id="go" style="width:100%;padding:16px;background:#ff006e;color:white;border:none;border-radius:12px;font-size:20px;font-weight:bold;cursor:pointer;">
+            Start Like + Follow (50)
+        </button>
+        <p style="text-align:center;margin-top:10px;font-size:14px;">তোর জন্য চুদির ভাই ❤️</p>
+    `;
+
+    document.body.appendChild(d);
+
+    // Drag
+    let drag=false, ox=0, oy=0;
+    d.onmousedown = e => { if(e.target.tagName!='BUTTON'){ drag=true; ox=e.clientX-d.offsetLeft; oy=e.clientY-d.offsetTop; } };
+    document.onmousemove = e => { if(drag){ d.style.left=e.clientX-ox+'px'; d.style.top=e.clientY-oy+'px'; d.style.transform='none'; } };
+    document.onmouseup = () => drag=false;
+
+    document.getElementById('go').onclick = () => {
+        let list = document.getElementById('urls').value.split(/\n|,/).map(x=>x.trim()).filter(x=>x);
+        if(!list.length) return alert('লিংক দে ভাই!');
+        if(list.length>50) { list=list.slice(0,50); alert('৫০টা নিচ্ছি'); }
+        d.remove();
+
+        let idx = 0;
+        function next(){
+            if(idx >= list.length){
+                alert('সব শেষ! চুদির ভাই তোকে ভালোবাসে');
+                return;
+            }
+
+            let url = list[idx++];
+            if(!url.includes('http')) url = 'https://www.facebook.com'+url;
+
+            let tab = window.open(url,'_blank');
+            if(!tab){ alert('পপআপ ব্লক করা আছে! Allow কর'); return; }
+
+            let done = false;
+            let tries = 0;
+
+            let timer = setInterval(() => {
+                if(tab.closed){ clearInterval(timer); next(); return; }
+                tries++;
+
+                try{
+                    let doc = tab.document;
+
+                    // ===== LIKE BUTTON CLICK (সবচেয়ে শক্তিশালী ৭টা selector 2025) =====
+                    let likeBtn = null;
+
+                    const likeSelectors = [
+                        'div[aria-label="Like"][role="button"]',
+                        'span[dir="auto"]:not([aria-hidden]):contains("Like")',
+                        'div[role="button"]:has(span:contains("Like"))',
+                        'div.x1n2onr6 div[role="button"] span.x1lliihq:contains("Like")',
+                        '.x1ey2m1c[role="none"] span:contains("Like")',
+                        'div.x78zum5.x1q0g3np span.x193iq5w:contains("Like")',
+                        'div[role="none"] span.x193iq5w:contains("Like")'
+                    ];
+
+                    for(let sel of likeSelectors){
+                        if(sel.includes(':contains')){
+                            likeBtn = Array.from(doc.querySelectorAll('span, div')).find(el => 
+                                el.textContent.trim() === 'Like' && el.offsetParent !== null && !el.textContent.includes('Liked')
+                            );
+                        } else {
+                            likeBtn = doc.querySelector(sel);
+                        }
+                        if(likeBtn) break;
+                    }
+
+                    // তোর দেওয়া exact structure ও কভার করা আছে
+                    if(!likeBtn){
+                        likeBtn = Array.from(doc.querySelectorAll('div[role="none"]'))
+                            .find(el => el.innerHTML.includes('Like') && el.querySelector('span')?.textContent==='Like');
+                    }
+
+                    if(likeBtn && !done){
+                        likeBtn.click();
+                        console.log(idx + '. Like মারা হয়ে গেছে');
+                    }
+
+                    // ===== FOLLOW BUTTON CLICK (আরও বেশি selector 2025) =====
+                    let followBtn = null;
+
+                    const followSelectors = [
+                        'div[aria-label*="Follow"][role="button"]',
+                        'div[role="button"]:has(span:contains("Follow"))',
+                        'div.x1i10hfl[role="button"] span:contains("Follow")',
+                        'div[aria-label="Follow"]',
+                        'span.x193iq5w:contains("Follow")'
+                    ];
+
+                    for(let sel of followSelectors){
+                        if(sel.includes(':contains')){
+                            followBtn = Array.from(doc.querySelectorAll('*')).find(el => 
+                                el.textContent?.trim()==='Follow' && el.offsetParent && !el.textContent.includes('Following')
+                            );
+                        } else {
+                            followBtn = doc.querySelector(sel);
+                        }
+                        if(followBtn) break;
+                    }
+
+                    if(followBtn && !done){
+                        followBtn.click();
+                        console.log(idx + '. Follow মারা হয়ে গেছে');
+                        done = true;
+                    }
+
+                    // যদি দুটোই হয়ে যায় বা ২৫ সেকেন্ড পার হয়
+                    if(done || tries > 50){
+                        setTimeout(() => { tab.close(); next(); }, 2000);
+                        clearInterval(timer);
+                    }
+
+                }catch(e){}
+            }, 500);
+        }
+
+        next();
+    };
+})();
